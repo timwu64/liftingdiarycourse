@@ -1,0 +1,17 @@
+[terminal]:
+npx drizzle-kit push
+
+[terminal]:
+npx add-mcp https://mcp.neon.tech/mcp
+
+[prompt 1 / default mode]:
+/mcp
+
+[prompt 2 / default mode]:
+list all of the available tables within the liftingdiarycourse db on neon
+
+[prompt 3 / default mode]:
+generate some example data for the above tables for user id [enter_user_id_here]. do not insert any data just yet into the neon database. I want to check the example data first.
+
+[prompt 4 / default mode]:
+this looks great. now insert all of that example data to the liftingdiarycourse db

@@ -6,15 +6,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Coding Standards — Read This First
 
-**Before generating any code, always check the `/docs` directory for a relevant standards file and follow it exactly.**
+> **MANDATORY:** Before writing or generating ANY code, you MUST read the relevant standards file(s) in the `/docs` directory. This is not optional — do not skip this step under any circumstances.
+
+**Step 1 — Identify the relevant docs file(s) for the task.**
+**Step 2 — Read and internalize the rules in that file.**
+**Step 3 — Only then write code, strictly following those rules.**
 
 | Topic | Standards file |
 |---|---|
 | UI components, date formatting, theming | `docs/ui.md` |
+| Data fetching, database queries, user data isolation | `docs/data-fetching.md` |
 
-These documents are the source of truth for how code must be written in this project. If a standards file covers the area you are working in, its rules override any default behavior or general best practice.
+These documents are the **single source of truth** for how code must be written in this project. Their rules override any default behavior, general best practice, or prior training knowledge. If a standards file covers the area you are working in, follow it exactly — no exceptions.
 
-- /docs/ui.md 
+- /docs/ui.md
+- /docs/data-fetching.md
 ## Commands
 
 ```bash

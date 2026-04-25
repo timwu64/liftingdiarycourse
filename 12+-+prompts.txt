@@ -1,0 +1,2 @@
+[prompt 1 / default mode]:
+implement a /dashboard page which will contain a datepicker that defaults to the current date. this page will load all the logged workouts for the date displayed in the datepicker.

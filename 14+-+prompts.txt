@@ -1,0 +1,6 @@
+[prompt 1 / edit mode]:
+create a new docs/data-fetching.md file and highlight that ALL data fetching within this app should be done via server components. data should NOT be fetched via route handlers, or via client components, or any other way, ONLY via server components. This is incredibly important.
+database queries must ALWAYS be done via helper functions within the /data directory. these helper functions must use drizzle ORM to query the database. DO NOT USE RAW SQL. It's incredibly important that a logged in user can ONLY access their own data. They SHOULD NOT be able to access any other data other than their own.
+
+[prompt 2 / edit mode]:
+implement the data fetching for workouts for the currently logged in user for the dashboard page and remove any dummy data within that page
