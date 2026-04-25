@@ -1,0 +1,5 @@
+[prompt 1 / edit mode]:
+create a new auth.md documentation file in the /docs directory. this file should highlight the coding standards for everything to do with auth in this app, specifically that this app uses clerk for authentication.
+
+[prompt 2 / edit mode]:
+create a data-mutations.md documentation file for the coding standards for everything to do with data mutations in this app. Specifically data mutations MUST be done via helper functions with the src/data directory which wrap db calls via drizzle orm. all data mutations MUST be done via server actions within colocated files named actions.ts. all server actions params must be typed and should NOT have the FormData data type. ALL server actions MUST validate the arguments passed to them via zod.

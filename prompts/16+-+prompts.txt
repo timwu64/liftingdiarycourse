@@ -1,0 +1,5 @@
+[prompt 1 / edit mode]:
+Give me a plan on how you would merge the dashboard-page branch into the main branch then resolve any merge issues, and create a new branch off of the main branch called create-workout-page. Do not implement anything just yet. Just give me a plan and outline.
+
+[prompt 2 / edit mode]:
+ok great. now implement this plan.
