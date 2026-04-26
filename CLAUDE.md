@@ -16,11 +16,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 |---|---|
 | UI components, date formatting, theming | `docs/ui.md` |
 | Data fetching, database queries, user data isolation | `docs/data-fetching.md` |
+| Authentication, Clerk usage, route protection, session identity | `docs/auth.md` |
+| Data mutations, server actions, zod validation | `docs/data-mutations.md` |
 
 These documents are the **single source of truth** for how code must be written in this project. Their rules override any default behavior, general best practice, or prior training knowledge. If a standards file covers the area you are working in, follow it exactly — no exceptions.
 
 - /docs/ui.md
 - /docs/data-fetching.md
+- /docs/auth.md
+- /docs/data-mutations.md
 ## Commands
 
 ```bash
