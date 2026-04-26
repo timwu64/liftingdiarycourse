@@ -18,6 +18,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Data fetching, database queries, user data isolation | `docs/data-fetching.md` |
 | Authentication, Clerk usage, route protection, session identity | `docs/auth.md` |
 | Data mutations, server actions, zod validation | `docs/data-mutations.md` |
+| Server Components, awaiting `params`/`searchParams`, client boundary | `docs/server-components.md` |
+| URL structure, `/dashboard` namespace, middleware route protection | `docs/routing.md` |
 
 These documents are the **single source of truth** for how code must be written in this project. Their rules override any default behavior, general best practice, or prior training knowledge. If a standards file covers the area you are working in, follow it exactly — no exceptions.
 
@@ -25,6 +27,8 @@ These documents are the **single source of truth** for how code must be written 
 - /docs/data-fetching.md
 - /docs/auth.md
 - /docs/data-mutations.md
+- /docs/server-components.md
+- /docs/routing.md
 ## Commands
 
 ```bash

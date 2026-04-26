@@ -43,3 +43,26 @@ export async function createWorkout(input: { name: string; startedAt: Date }) {
     .returning();
   return row;
 }
+
+export async function getWorkoutById(workoutId: string) {
+  const userId = await getCurrentUserId();
+  const [row] = await db
+    .select()
+    .from(workouts)
+    .where(and(eq(workouts.id, workoutId), eq(workouts.userId, userId)));
+  return row ?? null;
+}
+
+export async function updateWorkout(input: {
+  id: string;
+  name: string;
+  startedAt: Date;
+}) {
+  const userId = await getCurrentUserId();
+  const [row] = await db
+    .update(workouts)
+    .set({ name: input.name, startedAt: input.startedAt })
+    .where(and(eq(workouts.id, input.id), eq(workouts.userId, userId)))
+    .returning();
+  return row ?? null;
+}
