@@ -285,6 +285,78 @@ Place each schema in the same `actions.ts` file as the action that uses it, unle
 
 ---
 
+## Rule 6: Never Call `redirect()` Inside a Server Action
+
+**Server actions MUST NOT call `redirect()` from `next/navigation`.** Navigation after a successful mutation is the **client's** responsibility — the client awaits the action, and on success calls `router.push(...)` itself.
+
+### Required pattern
+
+```ts
+// src/app/dashboard/workout/new/actions.ts
+"use server";
+
+import { z } from "zod";
+import { revalidatePath } from "next/cache";
+import { createWorkout } from "@/data/workouts";
+
+const createWorkoutSchema = z.object({
+  name: z.string().min(1).max(120),
+  startedAt: z.coerce.date(),
+});
+
+export async function createWorkoutAction(input: z.infer<typeof createWorkoutSchema>) {
+  const data = createWorkoutSchema.parse(input);
+  const workout = await createWorkout(data);
+  revalidatePath("/dashboard");
+  return workout; // ✅ return the result; let the client navigate
+}
+```
+
+```tsx
+// src/app/dashboard/workout/new/CreateWorkoutForm.tsx
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { format } from "date-fns";
+import { createWorkoutAction } from "./actions";
+
+export default function CreateWorkoutForm(/* ... */) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  function handleSubmit(/* ... */) {
+    startTransition(async () => {
+      await createWorkoutAction({ name, startedAt });
+      router.push(`/dashboard?date=${format(startedAt, "yyyy-MM-dd")}`); // ✅ client-side
+    });
+  }
+  // ...
+}
+```
+
+### Forbidden
+
+```ts
+// FORBIDDEN — redirect() inside the server action
+"use server";
+import { redirect } from "next/navigation";
+
+export async function createWorkoutAction(input: { name: string; startedAt: Date }) {
+  const workout = await createWorkout(input);
+  redirect(`/dashboard?date=${format(workout.startedAt, "yyyy-MM-dd")}`); // ❌
+}
+```
+
+### Why
+
+- `redirect()` works by throwing a framework control-flow exception. When called inside a server action, it short-circuits the action's return value and forces the client into a navigation it cannot inspect, defer, or cancel.
+- Keeping navigation on the client makes the post-mutation flow obvious in one place — the same place that already owns form state, error handling, and pending UI.
+- The client can decide what to do with the action's return value (e.g. navigate to a detail page using the new row's `id`, show a toast, stay on the page) without needing a different action variant per outcome.
+- It cleanly separates concerns: the action mutates data and revalidates caches; the client orchestrates UX.
+
+---
+
 ## Mutation Authorization Reminder
 
 Server actions are public RPC endpoints. Every mutation MUST:
@@ -319,3 +391,4 @@ export async function updateWorkout(input: { id: string; name: string }) {
 | Typed object parameters (`{ id: string; name: string }`) | `FormData` parameters, `any`, `unknown`, or untyped params |
 | Zod schema + `.parse()` at the top of every action | No validation, manual ad-hoc checks, partial-field validation |
 | `getCurrentUserId()` resolved server-side, scoped `WHERE` | Trusting client-supplied `userId` or row identifier without user scope |
+| Client calls `router.push(...)` after the action resolves | `redirect()` from `next/navigation` inside a server action |
