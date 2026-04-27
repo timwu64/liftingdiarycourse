@@ -51,17 +51,11 @@ export default async function DashboardPage({ searchParams }: PageProps) {
       ) : (
         <div className="flex flex-col gap-3">
           {workouts.map((workout) => {
-            const completed = workout.completedAt !== null;
-            const durationMin = completed
-              ? Math.max(
-                  1,
-                  Math.round(
-                    (workout.completedAt!.getTime() -
-                      workout.startedAt.getTime()) /
-                      60000,
-                  ),
-                )
-              : null;
+            const exerciseCount = workout.workoutExercises.length;
+            const setCount = workout.workoutExercises.reduce(
+              (sum, we) => sum + we.sets.length,
+              0,
+            );
             return (
               <Link
                 key={workout.id}
@@ -74,9 +68,9 @@ export default async function DashboardPage({ searchParams }: PageProps) {
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-muted-foreground">
-                      {completed
-                        ? `Completed · Duration: ${durationMin} min`
-                        : `Started at ${format(workout.startedAt, "HH:mm")}`}
+                      {exerciseCount} exercise{exerciseCount === 1 ? "" : "s"} ·{" "}
+                      {setCount} set{setCount === 1 ? "" : "s"} · Started at{" "}
+                      {format(workout.startedAt, "HH:mm")}
                     </p>
                   </CardContent>
                 </Card>
