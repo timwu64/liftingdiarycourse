@@ -6,20 +6,17 @@ import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { formatDate } from "@/lib/dates";
 import { createWorkoutAction } from "./actions";
+
+function toLocalInputValue(d: Date): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
 
 export default function CreateWorkoutForm() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [startedAt, setStartedAt] = useState<Date>(() => new Date());
-  const [calendarOpen, setCalendarOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -37,53 +34,51 @@ export default function CreateWorkoutForm() {
     });
   }
 
-  function handleDateSelect(d: Date | undefined) {
-    if (!d) return;
-    const next = new Date(startedAt);
-    next.setFullYear(d.getFullYear(), d.getMonth(), d.getDate());
+  function handleStartedAtChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const next = new Date(e.target.value);
+    if (Number.isNaN(next.getTime())) return;
     setStartedAt(next);
-    setCalendarOpen(false);
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <Label htmlFor="name">Name</Label>
+        <Label htmlFor="name">Workout Name</Label>
         <Input
           id="name"
           name="name"
           type="text"
           required
           maxLength={120}
-          placeholder="e.g. Push Day"
+          placeholder="Enter workout name"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label>Started at</Label>
-        <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-          <PopoverTrigger
-            render={<Button type="button" variant="outline" />}
-          >
-            {formatDate(startedAt)}
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={startedAt}
-              onSelect={handleDateSelect}
-            />
-          </PopoverContent>
-        </Popover>
+        <Label htmlFor="startedAt">Start Time</Label>
+        <Input
+          id="startedAt"
+          type="datetime-local"
+          value={toLocalInputValue(startedAt)}
+          onChange={handleStartedAtChange}
+        />
       </div>
 
       {error && <p className="text-sm text-destructive">{error}</p>}
 
       <div className="flex items-center gap-2">
         <Button type="submit" disabled={isPending || name.trim().length === 0}>
-          {isPending ? "Creating..." : "Create workout"}
+          {isPending ? "Creating..." : "Create Workout"}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          disabled={isPending}
+          onClick={() => router.push("/dashboard")}
+        >
+          Cancel
         </Button>
       </div>
     </form>

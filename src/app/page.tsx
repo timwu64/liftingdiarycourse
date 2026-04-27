@@ -1,9 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { HeroButtons } from "./HeroButtons";
 
 export default async function RootPage() {
   const { userId } = await auth();
@@ -20,16 +19,7 @@ export default async function RootPage() {
           Log workouts, track exercises, and monitor your progress over time.
           Simple, focused, and built for lifters.
         </p>
-        <div className="flex justify-center gap-3">
-          <SignUpButton mode="modal">
-            <Button size="lg">Get started</Button>
-          </SignUpButton>
-          <SignInButton mode="modal">
-            <Button variant="outline" size="lg">
-              Sign in
-            </Button>
-          </SignInButton>
-        </div>
+        <HeroButtons />
       </div>
 
       <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-3">

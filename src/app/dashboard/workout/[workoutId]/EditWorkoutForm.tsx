@@ -57,6 +57,14 @@ export default function EditWorkoutForm({
     setCalendarOpen(false);
   }
 
+  function handleTimeChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const [h, m] = e.target.value.split(":").map(Number);
+    if (Number.isNaN(h) || Number.isNaN(m)) return;
+    const next = new Date(startedAt);
+    next.setHours(h, m, 0, 0);
+    setStartedAt(next);
+  }
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
@@ -75,25 +83,42 @@ export default function EditWorkoutForm({
 
       <div className="flex flex-col gap-2">
         <Label>Started at</Label>
-        <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-          <PopoverTrigger render={<Button type="button" variant="outline" />}>
-            {formatDate(startedAt)}
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={startedAt}
-              onSelect={handleDateSelect}
-            />
-          </PopoverContent>
-        </Popover>
+        <div className="flex items-center gap-2">
+          <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+            <PopoverTrigger render={<Button type="button" variant="outline" />}>
+              {formatDate(startedAt)}
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={startedAt}
+                onSelect={handleDateSelect}
+              />
+            </PopoverContent>
+          </Popover>
+          <Input
+            type="time"
+            aria-label="Time"
+            className="w-32"
+            value={format(startedAt, "HH:mm")}
+            onChange={handleTimeChange}
+          />
+        </div>
       </div>
 
       {error && <p className="text-sm text-destructive">{error}</p>}
 
       <div className="flex items-center gap-2">
         <Button type="submit" disabled={isPending || name.trim().length === 0}>
-          {isPending ? "Saving..." : "Save changes"}
+          {isPending ? "Saving..." : "Save"}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          disabled={isPending}
+          onClick={() => router.push("/dashboard")}
+        >
+          Cancel
         </Button>
       </div>
     </form>
