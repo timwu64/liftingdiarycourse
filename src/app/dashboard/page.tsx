@@ -7,6 +7,7 @@ import {
 import { formatDate } from "@/lib/dates";
 import { getWorkoutsForUser } from "@/data/workouts";
 import { format, parse } from "date-fns";
+import Link from "next/link";
 import DatePicker from "./DatePicker";
 
 interface PageProps {
@@ -41,32 +42,38 @@ export default async function DashboardPage({ searchParams }: PageProps) {
         ) : (
           <div className="flex flex-col gap-3">
             {workouts.map((workout) => (
-              <Card key={workout.id}>
-                <CardHeader className="pb-2">
-                  <CardTitle>{workout.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-col gap-3">
-                    {workout.workoutExercises.map((we) => (
-                      <div key={we.id}>
-                        <p className="mb-1.5 text-sm font-medium">
-                          {we.exercise.name}
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {we.sets.map((set) => (
-                            <span
-                              key={set.id}
-                              className="rounded-md bg-muted px-2.5 py-1 text-xs text-muted-foreground"
-                            >
-                              Set {set.setNumber} · {set.reps ?? "—"} reps · {set.weight ?? "—"} kg
-                            </span>
-                          ))}
+              <Link
+                key={workout.id}
+                href={`/dashboard/workout/${workout.id}`}
+                className="block"
+              >
+                <Card className="transition-colors hover:bg-muted/50">
+                  <CardHeader className="pb-2">
+                    <CardTitle>{workout.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-col gap-3">
+                      {workout.workoutExercises.map((we) => (
+                        <div key={we.id}>
+                          <p className="mb-1.5 text-sm font-medium">
+                            {we.exercise.name}
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {we.sets.map((set) => (
+                              <span
+                                key={set.id}
+                                className="rounded-md bg-muted px-2.5 py-1 text-xs text-muted-foreground"
+                              >
+                                Set {set.setNumber} · {set.reps ?? "—"} reps · {set.weight ?? "—"} kg
+                              </span>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         )}
